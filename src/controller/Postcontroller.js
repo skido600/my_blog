@@ -25,11 +25,11 @@ const postcontroller = (req, res) => {
     }
 
     try {
-      const title = fields.title?.toString().trim();
-      const description = fields.description?.toString().trim();
-      const Imagecaption = fields.Imagecaption?.toString().trim();
-      const userId = req.user?.userid;
+      const title = fields.title.toString().trim();
+      const description = fields.description.toString().trim();
+      const Imagecaption = fields.Imagecaption.toString().trim();
 
+      const userId = req.user?.userid;
       if (!userId) {
         return res
           .status(401)
@@ -49,6 +49,7 @@ const postcontroller = (req, res) => {
 
       // Normalize HeaderImage (single file)
       const rawHeaderImage = files.HeaderImage;
+
       const HeaderImageFile = Array.isArray(rawHeaderImage)
         ? rawHeaderImage[0]
         : rawHeaderImage;
@@ -61,6 +62,7 @@ const postcontroller = (req, res) => {
 
       // Normalize articleImages (can be multiple or single)
       const rawArticleImages = files.articleImages || [];
+      console.log(rawArticleImages);
       const articleImageFiles = Array.isArray(rawArticleImages)
         ? rawArticleImages
         : [rawArticleImages];
@@ -76,12 +78,15 @@ const postcontroller = (req, res) => {
 
       // Upload all article images to Cloudinary
       const uploadedArticleImages = await Promise.all(
-        articleImageFiles.map(async (file) => {
+        articleImageFiles.map(async (file, index) => {
           const result = await cloudinary.uploader.upload(file.filepath, {
             folder: "headerimage_folder/article",
             resource_type: "image",
           });
-          return { url: result.secure_url };
+
+          return {
+            url: result.secure_url,
+          };
         })
       );
 

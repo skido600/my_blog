@@ -19,10 +19,10 @@ const authenticate = (req, res, next) => {
       .status(401)
       .json({ success: false, message: "No token provided" });
   }
-  console.log("TOKEN TO VERIFY:", token);
+
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
-    console.log("DECODED TOKEN:", decoded);
+    // console.log("DECODED TOKEN:", decoded);
     req.user = decoded;
     next();
   } catch (error) {
