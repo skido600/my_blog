@@ -35,10 +35,10 @@ const login = async (req, res) => {
       }
     );
     res.cookie("Authorization", `Bearer ${token}`, {
-      httpOnly: true, // Secure: JS can't access this cookie
-      secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
-      sameSite: "strict", // protect against CSRF
+      sameSite: "strict",
     });
     return res.status(200).json({ message: "Login successful" });
   } catch (error) {

@@ -13,11 +13,18 @@ import cors from "cors";
 const server = express();
 server.use(express.json());
 server.use(cookieParser());
-server.use(cors());
+server.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
 server.use("/api/auth", router);
 server.use("/api", cronroute);
 server.use("/admin", createrouter);
 server.use("/all", getallpost);
+
 server.listen(port, () => {
   cronjob();
   console.log(`Server listening on all ${port}`);
