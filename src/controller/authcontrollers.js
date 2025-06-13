@@ -37,10 +37,16 @@ const login = async (req, res) => {
     res.cookie("Authorization", `Bearer ${token}`, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
+      maxAge: 3 * 24 * 60 * 60 * 1000,
       sameSite: "strict",
     });
-    return res.status(200).json({ message: "Login successful" });
+    return res.status(200).json({
+      message: "Login successful",
+      token: `Bearer ${token}`,
+      user: {
+        email: user.email,
+      },
+    });
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({ message: "Server error" });
