@@ -5,6 +5,8 @@ const authenticate = (req, res, next) => {
   // console.log("COOKIES:", req.cookies);
   // 1. Try Authorization header
   const authHeader = req.headers.authorization;
+  console.log("Received Authorization:", req.headers.authorization);
+
   if (authHeader && authHeader.startsWith("Bearer ")) {
     token = authHeader.split(" ")[1];
   }
@@ -22,7 +24,7 @@ const authenticate = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
-    // console.log("DECODED TOKEN:", decoded);
+    // console.log("Decoded without verify:", decoded);
     req.user = decoded;
     next();
   } catch (error) {

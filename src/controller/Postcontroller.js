@@ -20,7 +20,7 @@ const postcontroller = (req, res) => {
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
-      console.error("Formidable parse error:", err);
+      // console.error("Formidable parse error:", err);
       return res.status(400).json({ message: "Error parsing the files" });
     }
 
@@ -30,6 +30,9 @@ const postcontroller = (req, res) => {
       const Imagecaption = fields.Imagecaption.toString().trim();
 
       const userId = req.user?.userid;
+      // if (userId) {
+      //   // console.log(userId);
+      // }
       if (!userId) {
         return res
           .status(401)
@@ -62,7 +65,7 @@ const postcontroller = (req, res) => {
 
       // Normalize articleImages (can be multiple or single)
       const rawArticleImages = files.articleImages || [];
-      console.log(rawArticleImages);
+      // console.log(rawArticleImages);
       const articleImageFiles = Array.isArray(rawArticleImages)
         ? rawArticleImages
         : [rawArticleImages];
@@ -107,7 +110,7 @@ const postcontroller = (req, res) => {
         post: savedPost,
       });
     } catch (error) {
-      console.error("Error creating post:", error);
+      // console.error("Error creating post:", error);
       return res
         .status(500)
         .json({ success: false, message: "Something went wrong" });
