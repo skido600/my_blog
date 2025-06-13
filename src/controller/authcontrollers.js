@@ -46,5 +46,12 @@ const login = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
-
-export { login };
+const logout = (req, res) => {
+  res.clearCookie("Authorization", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  return res.status(200).json({ message: "Logged out successfully" });
+};
+export { login, logout };
