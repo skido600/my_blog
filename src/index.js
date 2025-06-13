@@ -13,9 +13,21 @@ import cors from "cors";
 const server = express();
 server.use(express.json());
 server.use(cookieParser());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://leoblog-seven.vercel.app",
+];
+
 server.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   })
