@@ -28,11 +28,9 @@ const postcontroller = (req, res) => {
       const title = fields.title.toString().trim();
       const description = fields.description.toString().trim();
       const Imagecaption = fields.Imagecaption.toString().trim();
-
+      const featured = fields.featured?.toString().trim() === "true";
       const userId = req.user?.userid;
-      // if (userId) {
-      //   // console.log(userId);
-      // }
+
       if (!userId) {
         return res
           .status(401)
@@ -100,6 +98,7 @@ const postcontroller = (req, res) => {
         userId,
         HeaderImage: resultHeaderImage.secure_url,
         articleImages: uploadedArticleImages,
+        featured,
       });
 
       const savedPost = await newPost.save();

@@ -36,7 +36,12 @@ const postSchema = mongoose.Schema(
     },
     views: { type: Number, default: 0 },
     viewedIPs: [String],
+    featured: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   { timestamps: true }
 );
 

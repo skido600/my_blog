@@ -75,5 +75,29 @@ const getPostByTitle = async (req, res) => {
     });
   }
 };
+const getFeaturedPosts = async (req, res) => {
+  try {
+    const featuredPosts = await Post.find({ featured: true }).sort({
+      createdAt: -1,
+    });
+    if (featuredPosts.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No featured posts found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      count: featuredPosts.length,
+      posts: featuredPosts,
+    });
+  } catch (error) {
+    console.error("Error fetching featured posts:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while fetching featured posts",
+    });
+  }
+};
 
-export { getAllPosts, getPostById, getPostByTitle };
+export { getAllPosts, getPostById, getPostByTitle, getFeaturedPosts };
