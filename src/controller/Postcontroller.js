@@ -113,6 +113,8 @@ const postcontroller = (req, res) => {
       return res
         .status(500)
         .json({ success: false, message: "Something went wrong" });
+    } finally {
+      fs.unlinkSync(uploadDir);
     }
   });
 };

@@ -8,6 +8,7 @@ import getallpost from "./routes/getallpostroute.js";
 import cookieParser from "cookie-parser";
 import cronjob from "./config/cronjob.js";
 import cronroute from "./routes/keepAlive.js";
+import Viewroute from "./routes/viewroute.js";
 import cors from "cors";
 
 const server = express();
@@ -38,6 +39,7 @@ server.use("/api/auth", router);
 server.use("/api", cronroute);
 server.use("/admin", createrouter);
 server.use("/all", getallpost);
+server.use("/posts", Viewroute);
 
 server.listen(port, () => {
   cronjob();
