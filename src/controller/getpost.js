@@ -19,8 +19,20 @@ const getAllPosts = async (req, res) => {
 const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
-    const userIP =
-      req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+
+    // Get real IP address even behind proxies
+    const ip =
+      req.headers["x-forwarded-for"]?.split(",")[0] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress;
+
+    // Get the device/browser info
+    const userAgent = req.headers["user-agent"];
+
+    // Combine IP and user-agent to uniquely identify a viewer
+    const viewerID = `${ip}_${userAgent}`;
+
+    // Find the post by ID
     const post = await Post.findById(id);
 
     if (!post) {
@@ -29,16 +41,27 @@ const getPostById = async (req, res) => {
         message: "Post not found",
       });
     }
-    if (!post.viewedIPs.includes(userIP)) {
+
+    // Make sure viewedIPs exists (just in case)
+    if (!Array.isArray(post.viewedIPs)) {
+      post.viewedIPs = [];
+    }
+
+    // Check if this viewer has already viewed the post
+    if (!post.viewedIPs.includes(viewerID)) {
       post.views += 1;
-      post.viewedIPs.push(userIP);
+      post.viewedIPs.push(viewerID);
       await post.save();
     }
-    post.viewedIPs = undefined;
+
+    // Hide viewedIPs before sending response
+    const postObj = post.toObject();
+    delete postObj.viewedIPs;
+
     res.status(200).json({
       success: true,
       message: "Post fetched successfully",
-      post,
+      post: postObj,
     });
   } catch (error) {
     console.error("Error fetching post:", error);
