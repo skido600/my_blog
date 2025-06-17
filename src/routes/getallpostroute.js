@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.get("/posts", getAllPosts);
-router.get("/posts/title/:title", getPostByTitle);
+router.get("/posts/:title", getPostByTitle);
 router.get("/posts/:id", getPostById);
 router.get("/post/featured", getFeaturedPosts);
 export default router;
