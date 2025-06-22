@@ -20,7 +20,6 @@ const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Get real IP address even behind proxies
     const ip =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
       req.connection.remoteAddress ||
