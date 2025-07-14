@@ -1,7 +1,7 @@
 import cron from "node-cron";
 const crobfunction = () => {
   cron.schedule("*/14 * * * *", () => {
-    const keepAliveUrl = `https://todo-express-4.onrender.com/api/keep-alive`;
+    const keepAliveUrl = `https://my-blog-z9ga.onrender.com/api/keep-alive`;
     console.log(`Performing self-ping to: ${keepAliveUrl}`);
 
     fetch(keepAliveUrl)
