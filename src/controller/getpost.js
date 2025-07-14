@@ -121,5 +121,37 @@ const getFeaturedPosts = async (req, res) => {
     });
   }
 };
+// Get post by slug
+async function GetbySlug(req, res) {
+  try {
+    const { slug } = req.params;
 
-export { getAllPosts, getPostById, getPostByTitle, getFeaturedPosts };
+    const post = await Post.findOne({ slug });
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      post,
+    });
+  } catch (error) {
+    console.error("Error fetching post by slug:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+}
+
+export {
+  getAllPosts,
+  getPostById,
+  getPostByTitle,
+  getFeaturedPosts,
+  GetbySlug,
+};

@@ -2,15 +2,16 @@ import formidable from "formidable";
 import { cloudinary } from "../config/dotenv.js";
 import { postSchema } from "../config/validate.js";
 import Post from "../models/postSchema.js";
-import fs from "fs";
+// import fs from "fs";
 import path from "path";
+import { generateSlug } from "./Slug.js";
 
 const postcontroller = (req, res) => {
   const uploadDir = path.join(process.cwd(), "upload_test");
 
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-  }
+  // if (!fs.existsSync(uploadDir)) {
+  //   fs.mkdirSync(uploadDir);
+  // }
 
   const form = formidable({
     uploadDir,
@@ -20,7 +21,6 @@ const postcontroller = (req, res) => {
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
-      // console.error("Formidable parse error:", err);
       return res.status(400).json({ message: "Error parsing the files" });
     }
 
@@ -68,7 +68,6 @@ const postcontroller = (req, res) => {
         ? rawArticleImages
         : [rawArticleImages];
 
-      // Upload HeaderImage to Cloudinary
       const resultHeaderImage = await cloudinary.uploader.upload(
         HeaderImageFile.filepath,
         {
@@ -77,7 +76,6 @@ const postcontroller = (req, res) => {
         }
       );
 
-      // Upload all article images to Cloudinary
       const uploadedArticleImages = await Promise.all(
         articleImageFiles.map(async (file, index) => {
           const result = await cloudinary.uploader.upload(file.filepath, {
@@ -96,12 +94,15 @@ const postcontroller = (req, res) => {
         description,
         Imagecaption,
         userId,
+        slug: "temporary",
         HeaderImage: resultHeaderImage.secure_url,
         articleImages: uploadedArticleImages,
         featured,
       });
-
       const savedPost = await newPost.save();
+      const finalSlug = generateSlug(title, savedPost._id);
+      savedPost.slug = finalSlug;
+      console.log(finalSlug);
 
       return res.status(201).json({
         success: true,
@@ -109,12 +110,12 @@ const postcontroller = (req, res) => {
         post: savedPost,
       });
     } catch (error) {
-      // console.error("Error creating post:", error);
+      console.log(error.stack);
       return res
         .status(500)
         .json({ success: false, message: "Something went wrong" });
     } finally {
-      fs.unlinkSync(uploadDir);
+      // fs.unlinkSync(uploadDir);
     }
   });
 };

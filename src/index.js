@@ -41,6 +41,9 @@ server.use("/admin", createrouter);
 server.use("/all", getallpost);
 server.use("/posts", Viewroute);
 
+// server.get("/", (req, res) => {
+//   res.json({ message: "testing" });
+// });
 server.listen(port, () => {
   cronjob();
   console.log(`Server listening on all ${port}`);

@@ -7,6 +7,12 @@ const postSchema = mongoose.Schema(
       required: [true, "title is required"],
       trim: true,
     },
+    slug: {
+      type: String,
+      required: [true, "title is required"],
+      trim: true,
+      unique: true,
+    },
     description: {
       type: String,
       required: [true, "description is required"],
@@ -16,6 +22,7 @@ const postSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true,
     },
     HeaderImage: {
       type: String,
