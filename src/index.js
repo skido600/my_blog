@@ -16,6 +16,7 @@ server.use(express.json());
 server.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:3000/",
   "https://leoblog-seven.vercel.app",
 ];
 
