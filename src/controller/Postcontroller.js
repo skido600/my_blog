@@ -2,7 +2,7 @@ import formidable from "formidable";
 import { cloudinary } from "../config/dotenv.js";
 import { postSchema } from "../config/validate.js";
 import Post from "../models/postSchema.js";
-// import fs from "fs";
+
 import path from "path";
 import { generateSlug } from "./Slug.js";
 

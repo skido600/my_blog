@@ -36,4 +36,18 @@ const postSchema = joi.object({
     .optional(),
   Imagecaption: joi.string().optional(),
 });
-export { Loginschema, postSchema };
+const Email = joi.object({
+  email: joi
+    .string()
+    .min(6)
+    .max(60)
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required()
+    .messages({
+      "string.email": "Email must be a valid address with .com or .net",
+      "string.min": "Email must be at least 6 characters",
+      "string.max": "Email must be less than or equal to 60 characters",
+      "string.empty": "Email is required",
+    }),
+});
+export { Loginschema, postSchema, Email };
